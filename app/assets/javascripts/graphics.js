@@ -76,12 +76,40 @@ function getData()
 
 var lineData ;
 
+function drawSquare(x,y, color, size)
+{
+  size = typeof size !== 'undefined' ? size : 10;
+
+  var rectangle = svgContainer.append("rect")
+                            .attr("x", x)
+                            .attr("y", y)
+                            .attr("fill", color)
+                            .attr("width", size)
+                            .attr("height", size)
+                            .style("opacity", 0.5);;
+}
+
+function drawHeatMat(gridPoints, size)
+{
+  // gridPoints - array of array of 3 - [[23,45,0] , [23,55,1] , [23,65,0]]
+  
+  heatColors = ["green", "pink", "yellow", "red"];
+
+  for(i=0; i<gridPoints.length; i++)
+  {
+    drawSquare(gridPoints[i][0],gridPoints[i][1],heatColors[gridPoints[i][2]], size);
+  }
+
+}
+
+
+
 function plotLines(a,b,c)
 {
 
   $('path').remove();
   //The data for our line
-  lineData = [ { "x": 0,  "y": -c/b },  { "x": 500, "y": (-c -(a*500) )/b}];
+  lineData = [ { "x": 0,  "y": -c/b },  { "x": widthSvg, "y": (-c -(a*widthSvg) )/b}];
 
 //This is the accessor function we talked about above
   var lineFunction = d3.svg.line()

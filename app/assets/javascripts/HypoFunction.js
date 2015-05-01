@@ -25,7 +25,7 @@ function HypoFunction (pTrueVal, pNumParams) {
     	if(this.theta.length != inparray.length)
     		return 0;
 
-    	for(i=0;i<pNumParams;i++)
+    	for(i=0;i<3;i++)
     	{
     		outSum = outSum + this.theta[i] * inparray[i];
     	}

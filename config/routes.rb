@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get 'home/index'
 
   post 'gradDesc' => 'home#gradDesc'
+  post 'heatMapPoints' => 'home#heatMapPoints'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
