@@ -1,6 +1,6 @@
 %#! /bin/octave -qf
 
-cd '/Users/rohanraja/Dropbox/Machine Learning/AndrewNg/mlclass-ex2-005/mlclass-ex2'
+cd 'lib/matlabFiles/logisticRegression'
 
 
 data = csvread('heatPoints.csv');

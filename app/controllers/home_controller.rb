@@ -4,16 +4,35 @@ class HomeController < ApplicationController
   def index
   end
 
+  def matlabDir
+    
+    return "lib/matlabFiles"
+
+  end
+
+  def algoDir(algo)
+
+    algos = ["logisticRegression", "neuralNetwork"]
+
+    matDir = matlabDir 
+
+    return matDir + "/" + algos[algo]
+
+  end
+
+  def dataDir(algo)
+    return algoDir(algo)
+  end
+
   def gradDesc
 
-  	matlabDir = "/Users/rohanraja/Dropbox/Machine Learning/AndrewNg/mlclass-ex2-005/mlclass-ex2"
 
   	x = ActiveSupport::JSON.decode(params['q'])
 
 
   	samples = x['rawTrainingData']['samples']
 
-  	f = open("#{matlabDir}/data.csv", "w")
+  	f = open("#{dataDir(0)}/data.csv", "w")
 
   	line = ""
 
@@ -28,7 +47,7 @@ class HomeController < ApplicationController
   	f.close
 
 
-  	out2 = `/usr/local/octave/3.8.0/bin/octave -q '/Users/rohanraja/Dropbox/Machine Learning/AndrewNg/mlclass-ex2-005/mlclass-ex2/wrapper.m'`
+  	out2 = `/usr/local/octave/3.8.0/bin/octave -q '#{algoDir(0)}/wrapper.m'`
 
   	finalTheta = ActiveSupport::JSON.decode(out2)
 
@@ -42,20 +61,18 @@ class HomeController < ApplicationController
   	require 'csv'
 
 
-  	matlabDir = "/Users/rohanraja/Dropbox/Machine Learning/AndrewNg/mlclass-ex2-005/mlclass-ex2"
-
   	x = ActiveSupport::JSON.decode(params['q'])
   	theta = x["hypoFunctions"][0]["theta"]
   	gridData = ActiveSupport::JSON.decode(params['gridData'])
 
-  	CSV.open("#{matlabDir}/heatPoints.csv", "w") do |csv|
+  	CSV.open("#{algoDir(0)}/heatPoints.csv", "w") do |csv|
   		csv << theta
   		csv << gridData
   	end
 
-  	out2 = `/usr/local/octave/3.8.0/bin/octave -q '/Users/rohanraja/Dropbox/Machine Learning/AndrewNg/mlclass-ex2-005/mlclass-ex2/heatmap.m'`
+  	out2 = `/usr/local/octave/3.8.0/bin/octave -q '#{algoDir(0)}/heatmap.m'`
 
-  	f = open("#{matlabDir}/heatPoints.csv")
+  	f = open("#{algoDir(0)}/heatPoints.csv")
 
   	data = f.read
 
