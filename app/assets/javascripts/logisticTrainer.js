@@ -7,7 +7,7 @@ function LogTrainer (tData, pNumClasses) {
 
     this.polyDegree = 1;
 
-    
+    this.ajaxManager = new AjaxManager();
 
     this.initHypoFunctions = function()
     {
@@ -37,79 +37,31 @@ function LogTrainer (tData, pNumClasses) {
     	this.initHypoFunctions();
     };
 
-
-    this.gradientDescent = function(hypoFunc, rate, numIter)
-    {
-    	var m = this.trainingData.samples.length;
-
-    	for(k=0; k<numIter; k++)
-    	{
-	    	var newTheta = [];
-
-	    	
-	    	for(j=0; j < hypoFunc.numParams; j++)
-	    	{
-	    		var inSum = 0;
-
-	    		
-	    		for(i=0;i<m;i++)
-	    		{
-
-	    			var curSample = this.trainingData.samples[i] ;
-	    			var curVal = (hypoFunc.getVal(curSample.inputVector) - curSample.outputVal);
-	    			tmpSum = curSample.inputVector[j]*curVal;
-	    			inSum = inSum + tmpSum;
-
-	    		}
-
-	    		var dJdQ = inSum / m;
-
-	    		newTheta.push(hypoFunc.theta[j] - rate*dJdQ);
-
-	    	}
-
-	    	hypoFunc.theta = newTheta ;
-	    	console.log(hypoFunc.theta);
-	    }
-    }
-
     this.train = function()
     {
-    	this.gradientDescent(this.hypoFunctions[0], 0.1, 50);
-
-    	console.log("FINAL THETA = ");
-    	console.log(this.hypoFunctions[0].theta);
-
-    	plotLines(this.hypoFunctions[0].theta[0],this.hypoFunctions[0].theta[1],this.hypoFunctions[0].theta[2]);
-    
-    	this.heatMap();
+    	this.requestServerTraining();
     };
 
-    this.sendData = function()
+    this.processTrainedTheta = function(data)
+    {
+        console.log(data.finalTheta);
+        trainer.hypoFunctions[0].theta = data.finalTheta ;
+        plotLines(trainer.hypoFunctions[0].theta[1],trainer.hypoFunctions[0].theta[2],trainer.hypoFunctions[0].theta[0]);
+        trainer.heatMap();
+    }
+
+    this.requestServerTraining = function()
     {
     	jsonData = JSON.stringify(this);
 
     	var server_url = '/gradDesc';
 
-    	$.ajax({
-		  url: server_url,
-		  type: "POST",
-		  data: {q : jsonData},
-		  dataType: "json",
-		  success: function(data){
-		  	console.log(data.finalTheta);
-		  	trainer.hypoFunctions[0].theta = data.finalTheta ;
-		  	plotLines(trainer.hypoFunctions[0].theta[1],trainer.hypoFunctions[0].theta[2],trainer.hypoFunctions[0].theta[0]);
-		  	trainer.heatMap();
-		  }
-		});
+        this.ajaxManager.postJSON(server_url, jsonData, this.processTrainedTheta);
 
-    	return jsonData;
     };
 
     this.predict = function(x,y)
     {
-
     	var hypoVal = this.hypoFunctions[0].getVal([1,x,y]);
 
     	if(hypoVal >= 0.5)
@@ -121,7 +73,7 @@ function LogTrainer (tData, pNumClasses) {
     this.heatMap = function()
     {
     	var gridPoints = [];
-    	var stepSize = 5;
+    	var stepSize = 15;
     	
     	jsonData = JSON.stringify(this);
 

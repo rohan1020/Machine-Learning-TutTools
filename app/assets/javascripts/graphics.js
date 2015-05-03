@@ -10,7 +10,7 @@ var trainer;
 function addCircle(circle)
 {
 
-  var numCircles = 20;
+  var numCircles = 100;
 
   var radius = 50;
 
@@ -65,7 +65,7 @@ function trainData()
 
   var dataSet = new DataSet(tuples,2);
   trainer = new LogTrainer(dataSet,2);
-  trainer.sendData();
+  trainer.train();
 }
 
 function getData()
@@ -76,7 +76,7 @@ function getData()
 
 var lineData ;
 
-function drawSquare(x,y, color, size)
+function drawSquare(x,y, color, size, opacty)
 {
   size = typeof size !== 'undefined' ? size : 10;
 
@@ -86,18 +86,18 @@ function drawSquare(x,y, color, size)
                             .attr("fill", color)
                             .attr("width", size)
                             .attr("height", size)
-                            .style("opacity", 0.5);;
+                            .style("opacity", opacty);;
 }
 
 function drawHeatMat(gridPoints, size)
 {
   // gridPoints - array of array of 3 - [[23,45,0] , [23,55,1] , [23,65,0]]
-  
+
   heatColors = ["green", "pink", "yellow", "red"];
 
   for(i=0; i<gridPoints.length; i++)
   {
-    drawSquare(gridPoints[i][0],gridPoints[i][1],heatColors[gridPoints[i][2]], size);
+    drawSquare(gridPoints[i][0],gridPoints[i][1],heatColors[gridPoints[i][2]], size, gridPoints[i][3]);
   }
 
 }
