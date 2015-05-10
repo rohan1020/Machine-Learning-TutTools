@@ -10,7 +10,7 @@ class HomeController < ApplicationController
 
   end
 
-  def algoDir(algo)
+  def algoDir(algo = 0)
 
     algos = ["logisticRegression", "neuralNetwork"]
 
@@ -20,7 +20,7 @@ class HomeController < ApplicationController
 
   end
 
-  def dataDir(algo)
+  def dataDir(algo = 0)
     return algoDir(algo)
   end
 
@@ -32,7 +32,7 @@ class HomeController < ApplicationController
 
   	samples = x['rawTrainingData']['samples']
 
-  	f = open("#{dataDir(0)}/data.csv", "w")
+  	f = open("#{dataDir}/data.csv", "w")
 
   	line = ""
 
@@ -47,7 +47,7 @@ class HomeController < ApplicationController
   	f.close
 
 
-  	out2 = `/usr/local/octave/3.8.0/bin/octave -q '#{algoDir(0)}/wrapper.m'`
+  	out2 = `/usr/local/octave/3.8.0/bin/octave -q '#{algoDir}/wrapper.m'`
 
   	finalTheta = ActiveSupport::JSON.decode(out2)
 
@@ -65,14 +65,14 @@ class HomeController < ApplicationController
   	theta = x["hypoFunctions"][0]["theta"]
   	gridData = ActiveSupport::JSON.decode(params['gridData'])
 
-  	CSV.open("#{algoDir(0)}/heatPoints.csv", "w") do |csv|
+  	CSV.open("#{algoDir}/heatPoints.csv", "w") do |csv|
   		csv << theta
   		csv << gridData
   	end
 
-  	out2 = `/usr/local/octave/3.8.0/bin/octave -q '#{algoDir(0)}/heatmap.m'`
+  	out2 = `/usr/local/octave/3.8.0/bin/octave -q '#{algoDir}/heatmap.m'`
 
-  	f = open("#{algoDir(0)}/heatPoints.csv")
+  	f = open("#{algoDir}/heatPoints.csv")
 
   	data = f.read
 
