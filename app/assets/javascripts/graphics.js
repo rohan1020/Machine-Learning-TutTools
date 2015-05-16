@@ -51,6 +51,11 @@ function mousemove(d, i) {
 function changeClass()
 {
 	currentClass = 1 - currentClass;
+
+  btnclasses = ['btn btn-danger', 'btn btn-primary'];
+
+  $('#classbtn').attr('class', btnclasses[currentClass]);
+
 }
 
 function trainData()

@@ -6,7 +6,7 @@ function LogTrainer (tData, pNumClasses) {
     this.hypoFunctions = [];  // Hypothetical Functions, one for each class
 
     this.polyDegree = 1;
-
+    stepSize = 10;
     this.ajaxManager = new AjaxManager();
 
     this.initHypoFunctions = function()
@@ -72,8 +72,7 @@ function LogTrainer (tData, pNumClasses) {
 
     this.heatMap = function()
     {
-    	var gridPoints = [];
-    	var stepSize = 15;
+    	
     	
     	jsonData = JSON.stringify(this);
 
@@ -100,7 +99,7 @@ function LogTrainer (tData, pNumClasses) {
 		});
 
     	
-    }
+    };
 
     this.prepareTrainer();
 
